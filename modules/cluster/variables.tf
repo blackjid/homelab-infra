@@ -34,3 +34,13 @@ variable "ceph_volume_size" {
 variable "network_bridge" {
   type = object({ name=string })
 }
+
+variable "ips" {
+  type = list(string)
+  default = []
+}
+
+variable "macs" {
+  type = list(string)
+  default = []
+}

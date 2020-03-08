@@ -31,7 +31,6 @@ module "k3s_cluster" {
   source = "./modules/cluster"
 
   name = "k3s"
-  size = 3
 
   base_volume = libvirt_volume.ubuntu_18_04
   storage_pool = libvirt_pool.default
@@ -39,7 +38,20 @@ module "k3s_cluster" {
   ceph_volume_size = 75161927680
 
   ssh_authorized_keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGRyQJ2V+aljTD/SZp7CKpmwkyO47A+WXq4LpyQlknJY jidonoso@black-mac.lan"]
+
   network_bridge = libvirt_network.k3s_network
+
+  ips = [
+    "10.2.1.10",
+    "10.2.1.11",
+    "10.2.1.12",
+  ]
+
+  macs = [
+    "92:2F:BA:CA:04:A9",
+    "92:2F:BA:CA:00:F7",
+    "92:2F:BA:CA:0D:9C",
+  ]
 }
 
 output "ips" {

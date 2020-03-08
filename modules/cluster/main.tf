@@ -1,5 +1,5 @@
 resource "libvirt_volume" "node_boot" {
-  count = var.size
+  count = length(var.ips)
 
   name           = "${var.name}-${count.index}.qcow2"
   pool           = var.storage_pool.name
@@ -8,7 +8,7 @@ resource "libvirt_volume" "node_boot" {
 }
 
 data "template_file" "user_data" {
-  count = var.size
+  count = length(var.ips)
   template = file("${path.module}/cloud_init.cfg")
 
   vars = {
@@ -17,7 +17,7 @@ data "template_file" "user_data" {
 }
 
 data "template_file" "meta_data" {
-  count = var.size
+  count = length(var.ips)
   template = file("${path.module}/meta_data.cfg")
 
   vars = {
@@ -26,13 +26,17 @@ data "template_file" "meta_data" {
 }
 
 data "template_file" "network_config" {
-  count = var.size
+  count = length(var.ips)
 
   template = file("${path.module}/network_config.cfg")
+
+  vars = {
+    network_address = var.ips[count.index]
+  }
 }
 
 resource "libvirt_cloudinit_disk" "commoninit" {
-  count = var.size
+  count = length(var.ips)
 
 
   name           = "commoninit-${var.name}-${count.index}.iso"
@@ -44,7 +48,7 @@ resource "libvirt_cloudinit_disk" "commoninit" {
 
 # volumes to attach to the "workers" domains as main disk
 resource "libvirt_volume" "ceph_volume" {
-  count          = var.size
+  count          = length(var.ips)
 
   name           = "${var.name}-${count.index}-ceph.qcow2"
   size           = var.ceph_volume_size
@@ -52,7 +56,7 @@ resource "libvirt_volume" "ceph_volume" {
 }
 
 resource "libvirt_domain" "node" {
-  count = var.size
+  count = length(var.ips)
 
   name   = "${var.name}-${count.index}"
   memory = "8192"
@@ -63,6 +67,9 @@ resource "libvirt_domain" "node" {
 
   network_interface {
     bridge     = var.network_bridge.name
+    addresses = [var.ips[count.index]]
+    mac = var.macs[count.index]
+    # hostname = "${var.name}-${count.index}" wait for PR to be merged
     wait_for_lease = true
   }
 
