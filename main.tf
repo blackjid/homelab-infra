@@ -20,6 +20,13 @@ resource "libvirt_volume" "ubuntu_18_04" {
   source = "https://cloud-images.ubuntu.com/releases/bionic/release/ubuntu-18.04-server-cloudimg-amd64.img"
 }
 
+resource "libvirt_network" "k3s_network" {
+  name = "br0"
+  mode = "bridge"
+  bridge = var.bridge_name
+  autostart = true
+}
+
 module "k3s_cluster" {
   source = "./modules/cluster"
 
@@ -32,7 +39,7 @@ module "k3s_cluster" {
   ceph_volume_size = 75161927680
 
   ssh_authorized_keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGRyQJ2V+aljTD/SZp7CKpmwkyO47A+WXq4LpyQlknJY jidonoso@black-mac.lan"]
-  network_bridge = "br0"
+  network_bridge = libvirt_network.k3s_network
 }
 
 output "ips" {

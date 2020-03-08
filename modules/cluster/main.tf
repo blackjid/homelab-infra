@@ -62,7 +62,7 @@ resource "libvirt_domain" "node" {
   qemu_agent = true
 
   network_interface {
-    bridge     = var.network_bridge
+    bridge     = var.network_bridge.name
     wait_for_lease = true
   }
 
