@@ -9,7 +9,7 @@ resource "libvirt_volume" "node_boot" {
 
 data "template_file" "user_data" {
   count = length(var.ips)
-  template = file("${path.module}/cloud_init.cfg")
+  template = file("${path.module}/templates/cloud_init.cfg")
 
   vars = {
     ssh_authorized_keys = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGRyQJ2V+aljTD/SZp7CKpmwkyO47A+WXq4LpyQlknJY jidonoso@black-mac.lan"
@@ -18,7 +18,7 @@ data "template_file" "user_data" {
 
 data "template_file" "meta_data" {
   count = length(var.ips)
-  template = file("${path.module}/meta_data.cfg")
+  template = file("${path.module}/templates/meta_data.cfg")
 
   vars = {
     hostname = "${var.name}-${count.index}"
@@ -28,7 +28,7 @@ data "template_file" "meta_data" {
 data "template_file" "network_config" {
   count = length(var.ips)
 
-  template = file("${path.module}/network_config.cfg")
+  template = file("${path.module}/templates/network_config.cfg")
 
   vars = {
     network_address = var.ips[count.index]
