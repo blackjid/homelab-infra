@@ -64,6 +64,7 @@ resource "libvirt_domain" "node" {
 
   cloudinit  = libvirt_cloudinit_disk.commoninit[count.index].id
   qemu_agent = true
+  autostart  = true
 
   network_interface {
     bridge     = var.network_bridge.name
