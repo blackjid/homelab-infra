@@ -34,8 +34,8 @@ module "k3s_cluster" {
 
   base_volume = libvirt_volume.ubuntu_20_04
   storage_pool = libvirt_pool.default
-  boot_volume_size = 21474836480
-  ceph_volume_size = 75161927680
+  boot_volume_size = 16106127360
+  ceph_volume_size = 69793218560
 
   ssh_authorized_keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGRyQJ2V+aljTD/SZp7CKpmwkyO47A+WXq4LpyQlknJY jidonoso@black-mac.lan"]
 
