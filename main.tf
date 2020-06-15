@@ -14,10 +14,10 @@ resource "libvirt_pool" "default" {
   path = "/var/lib/libvirt/images/default"
 }
 
-resource "libvirt_volume" "ubuntu_18_04" {
-  name   = "ubuntu_18_04"
+resource "libvirt_volume" "ubuntu_20_04" {
+  name   = "ubuntu_20_04"
   pool   = libvirt_pool.base.name
-  source = "https://cloud-images.ubuntu.com/releases/bionic/release/ubuntu-18.04-server-cloudimg-amd64.img"
+  source = "https://cloud-images.ubuntu.com/releases/focal/release/ubuntu-20.04-server-cloudimg-amd64.img"
 }
 
 resource "libvirt_network" "k3s_network" {
@@ -32,7 +32,7 @@ module "k3s_cluster" {
 
   name = "k3s"
 
-  base_volume = libvirt_volume.ubuntu_18_04
+  base_volume = libvirt_volume.ubuntu_20_04
   storage_pool = libvirt_pool.default
   boot_volume_size = 21474836480
   ceph_volume_size = 75161927680
