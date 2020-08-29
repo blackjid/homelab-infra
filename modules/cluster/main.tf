@@ -11,9 +11,7 @@ data "template_file" "user_data" {
   count = length(var.ips)
   template = file("${path.module}/templates/cloud_init.cfg")
 
-  vars = {
-    ssh_authorized_keys = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGRyQJ2V+aljTD/SZp7CKpmwkyO47A+WXq4LpyQlknJY jidonoso@black-mac.lan"
-  }
+  vars = {  }
 }
 
 data "template_file" "meta_data" {
@@ -47,12 +45,12 @@ resource "libvirt_cloudinit_disk" "commoninit" {
 }
 
 # volumes to attach to the "workers" domains as main disk
-resource "libvirt_volume" "ceph_volume" {
+resource "libvirt_volume" "pv_volume" {
   count          = length(var.ips)
 
-  name           = "${var.name}-${count.index}-ceph.qcow2"
-  size           = var.ceph_volume_size
-  pool           = var.storage_pool.name
+  name           = "${var.name}-${count.index}-pv.qcow2"
+  size           = var.pv_volume_size
+  pool           = var.pv_storage_pool.name
 }
 
 resource "libvirt_domain" "node" {
@@ -79,7 +77,7 @@ resource "libvirt_domain" "node" {
   }
 
   disk {
-    volume_id = libvirt_volume.ceph_volume[count.index].id
+    volume_id = libvirt_volume.pv_volume[count.index].id
     scsi      = "true"
   }
 

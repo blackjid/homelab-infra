@@ -14,6 +14,12 @@ resource "libvirt_pool" "default" {
   path = "/var/lib/libvirt/images/default"
 }
 
+resource "libvirt_pool" "longhorn" {
+  name = "longhorn"
+  type = "dir"
+  path = "/mnt/longhorn"
+}
+
 resource "libvirt_volume" "ubuntu_20_04" {
   name   = "ubuntu_20_04"
   pool   = libvirt_pool.base.name
@@ -34,10 +40,10 @@ module "k3s_cluster" {
 
   base_volume = libvirt_volume.ubuntu_20_04
   storage_pool = libvirt_pool.default
-  boot_volume_size = 16106127360
-  ceph_volume_size = 69793218560
+  boot_volume_size = 50000000000
 
-  ssh_authorized_keys = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGRyQJ2V+aljTD/SZp7CKpmwkyO47A+WXq4LpyQlknJY jidonoso@black-mac.lan"]
+  pv_storage_pool = libvirt_pool.longhorn
+  pv_volume_size = 300000000000
 
   network_bridge = libvirt_network.k3s_network
 

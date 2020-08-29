@@ -25,10 +25,13 @@ variable "boot_volume_size" {
   description = "Default to 10GB"
 }
 
-variable "ceph_volume_size" {
+variable "pv_volume_size" {
   type = number
   default = 107374182400
   description = "Default to 100GB"
+}
+
+variable "pv_storage_pool" {
 }
 
 variable "network_bridge" {
