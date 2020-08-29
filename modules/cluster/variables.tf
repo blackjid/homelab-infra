@@ -47,3 +47,8 @@ variable "macs" {
   type = list(string)
   default = []
 }
+
+variable "gpu_guids" {
+  type = list(string)
+  default = []
+}

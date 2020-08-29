@@ -23,6 +23,15 @@ data "template_file" "meta_data" {
   }
 }
 
+data "template_file" "gpu_passthrough" {
+  count = length(var.gpu_guids)
+  template = file("${path.module}/templates/gpu_passthrough.xsl")
+
+  vars = {
+    gpu_guid = "${var.gpu_guids[count.index]}"
+  }
+}
+
 data "template_file" "network_config" {
   count = length(var.ips)
 
@@ -93,10 +102,11 @@ resource "libvirt_domain" "node" {
     target_port = "1"
   }
 
-  graphics {
-    type        = "spice"
-    listen_type = "address"
-    autoport    = true
+  dynamic "xml" {
+    for_each = var.gpu_guids[count.index] != "" ? [1] : []
+    content {
+      xslt = data.template_file.gpu_passthrough[count.index].rendered
+    }
   }
 }
 

@@ -58,6 +58,12 @@ module "k3s_cluster" {
     "92:2F:BA:CA:00:F7",
     "92:2F:BA:CA:0D:9C",
   ]
+
+  gpu_guids = [
+    "",
+    "",
+    "88524b2f-6380-42e2-9c92-832c9191f898"
+  ]
 }
 
 output "ips" {
