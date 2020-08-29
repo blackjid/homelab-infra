@@ -45,6 +45,10 @@ module "k3s_cluster" {
   pv_storage_pool = libvirt_pool.longhorn
   pv_volume_size = 300000000000
 
+  sudo_password       = var.sudo_password
+  k3s_token           = var.k3s_token
+  k3s_master_hostname = var.k3s_master_hostname
+
   network_bridge = libvirt_network.k3s_network
 
   ips = [

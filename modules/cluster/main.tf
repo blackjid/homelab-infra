@@ -11,7 +11,11 @@ data "template_file" "user_data" {
   count = length(var.ips)
   template = file("${path.module}/templates/cloud_init.cfg")
 
-  vars = {  }
+  vars = {
+    sudo_password       = var.sudo_password
+    k3s_token           = var.k3s_token
+    k3s_master_hostname = var.k3s_master_hostname
+  }
 }
 
 data "template_file" "meta_data" {
