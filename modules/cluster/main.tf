@@ -74,14 +74,13 @@ resource "libvirt_domain" "node" {
   vcpu   = 2
 
   cloudinit  = libvirt_cloudinit_disk.commoninit[count.index].id
+  cmdline = []
   qemu_agent = true
   autostart  = true
 
   network_interface {
     bridge     = var.network_bridge.name
-    addresses = [var.ips[count.index]]
     mac = var.macs[count.index]
-    # hostname = "${var.name}-${count.index}" wait for PR to be merged
     wait_for_lease = true
   }
 

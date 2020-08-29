@@ -13,7 +13,6 @@ variable "ssh_authorized_keys" {
 }
 
 variable "base_volume" {
-
 }
 
 variable "storage_pool" {
